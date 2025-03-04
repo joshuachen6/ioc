@@ -1,5 +1,14 @@
 #pragma once
 
+#define CONCAT2(A, B) A##B
+#define CONCAT2_DEFERRED(A, B) CONCAT2(A, B)
+#define L_TRANSIENT(name)                                                      \
+  name() { instance = _##name::create(); }                                     \
+  ~name() { delete instance; }
+#define L_SINGLETON(name)                                                      \
+  name() { instance = &_##name::getInstance(); }
+#define L(lifetime, name) CONCAT2_DEFERRED(L_, lifetime)(name)
+
 #define COMPONENT(lifetime, name, ...)                                         \
   class _##name {                                                              \
   public:                                                                      \
@@ -17,18 +26,7 @@
   };                                                                           \
   class name {                                                                 \
   public:                                                                      \
-    name() {                                                                   \
-      if (#lifetime == "singleton") {                                          \
-        instance = &_##name::getInstance();                                    \
-      } else {                                                                 \
-        instance = _##name::create();                                          \
-      }                                                                        \
-    }                                                                          \
-    ~name() {                                                                  \
-      if (#lifetime == "transient") {                                          \
-        delete instance;                                                       \
-      }                                                                        \
-    }                                                                          \
+    L(lifetime, name)                                                          \
     _##name &operator*() { return *instance; }                                 \
     _##name *operator->() { return instance; }                                 \
                                                                                \

@@ -23,7 +23,7 @@ All components are automatically wrapped in a wrapper class. This class can be u
 
 // Define singleton components
 #ifdef prod
-COMPONENT(singleton, Greeter,
+COMPONENT(SINGLETON, Greeter,
   std::string greet() {
     return "Hello Prod";
   }
@@ -31,7 +31,7 @@ COMPONENT(singleton, Greeter,
 #endif
 
 #ifdef dev
-COMPONENT(singleton, Greeter,
+COMPONENT(SINGLETON, Greeter,
   std::string greet() {
     return "Hello Dev";
   }
@@ -39,7 +39,7 @@ COMPONENT(singleton, Greeter,
 #endif
 
 // Define a transient component
-COMPONENT(transient, Printer,
+COMPONENT(TRANSIENT, Printer,
   Greeter greeter;
   void print() {
     std::cout << greeter->greet() << std::endl;
