@@ -1,5 +1,9 @@
 #pragma once
 
+struct _IOCBase {
+  void init();
+};
+
 #define CONCAT2(A, B) A##B
 #define CONCAT2_DEFERRED(A, B) CONCAT2(A, B)
 #define L_TRANSIENT(name)                                                      \
@@ -10,7 +14,7 @@
 #define L(lifetime, name) CONCAT2_DEFERRED(L_, lifetime)(name)
 
 #define COMPONENT(lifetime, name, ...)                                         \
-  class _##name {                                                              \
+  class _##name : public _IOCBase {                                            \
   public:                                                                      \
     static _##name &getInstance() {                                            \
       static _##name instance;                                                 \
@@ -20,7 +24,7 @@
     static _##name *create() { return new _##name(); }                         \
                                                                                \
   private:                                                                     \
-    _##name() {}                                                               \
+    _##name() { init(); }                                                      \
     _##name(const _##name &) = delete;                                         \
     _##name &operator=(const _##name &) = delete;                              \
   };                                                                           \
