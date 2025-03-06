@@ -53,3 +53,11 @@ int main() {
   p->print();
 }
 ```
+
+## Advanced
+
+There is a provided initialization function that can be defined to provide startup logic when the class is created.
+
+```cpp
+void init();
+```
